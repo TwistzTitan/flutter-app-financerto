@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,17 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all<double>(5),
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.white60),
-            overlayColor: MaterialStateProperty.all<Color>(Colors.white60),
-            side: MaterialStateProperty.all<BorderSide>(BorderSide(color: Colors.white60))
-          )
-        ),
         primaryColor: Color(0xFF161330),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(title: 'FinanCerto'),
     );
   }
@@ -112,11 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           fit: FlexFit.tight,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(_essencial == 0 ?"$semOrcamento":"R\$ $_essencial",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 32 ,
-                            ),),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Text(_essencial == 0 ?"$semOrcamento":"R\$ $_essencial",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 32 ,
+                              ),),
+                            ),
                           ),
                         ),
                       ],
@@ -174,11 +172,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                         height: 150 ,
                         child:  Center(
-                          child:Text(_curtoPrazo == 0 ?"$semOrcamento":"R\$ $_curtoPrazo",
+                          child:Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(_curtoPrazo == 0 ?"$semOrcamento":"R\$ $_curtoPrazo",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                        ),),),
+                                color: Colors.white,
+                                fontSize: 32,
+                        ),),
+                              ),
+                            ),
+                          ),),
                         //color: Colors.white60,
                         ),
                       ),
@@ -195,11 +201,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                     ),
                         child:  Center(
-                          child:Text(_longoPrazo == 0 ?"$semOrcamento":"R\$ $_longoPrazo",
+                          child:FittedBox(
+                            fit: BoxFit.contain,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_longoPrazo == 0 ?"$semOrcamento":"R\$ $_longoPrazo",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                        ),),),
+                              color: Colors.white,
+                              fontSize: 32,
+                        ),),
+                            ),
+                          ),),
                         ),
                         
                       ),
@@ -235,11 +247,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                         color: Colors.lightGreen,
                                     ),
                        child:  Center(
-                          child:Text(_livre == 0 ?"$semOrcamento":"R\$ $_livre",
+                          child:FittedBox(
+                            fit: BoxFit.contain,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_livre == 0 ?"$semOrcamento":"R\$ $_livre",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                        ),),),
+                              color: Colors.white,
+                              fontSize: 32,
+                        ),),
+                            ),
+                          ),),
                        
                         ),
                       ),
@@ -255,29 +273,30 @@ class _MyHomePageState extends State<MyHomePage> {
                     flex: 3,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        color: Colors.white12,
-                        child: TextField(
-                          controller: _textEditingController,
-                          decoration: InputDecoration(
-                            hintText: "Digite aqui seu orçamento",
-                            hintStyle: TextStyle(color: Colors.white54),
-                            fillColor: Colors.white60,
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color:Colors.white70)),
-                            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white70))
-                          ),
-                          style: TextStyle(color: Colors.white60),
-                          cursorColor: Colors.white60,
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          keyboardAppearance: Brightness.dark ,
-                          onEditingComplete: (){
-                            if(_textEditingController.text.isNotEmpty){
-                              calculaOrcamento(double.parse(_textEditingController.text));                          
-                              _textEditingController.clear();
-                            }
-                          },
+                      child: TextField(
+                        controller: _textEditingController,
+                        maxLength: 8,
+                        decoration: InputDecoration(
+                          hintText: "Digite aqui seu orçamento",
+                          hintStyle: TextStyle(color: Colors.white54),
+                          fillColor: Colors.white12,
+                          filled: true,
+                          counterStyle: TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color:Colors.white70)),
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white70))
                         ),
+                        style: TextStyle(color: Colors.white60),
+                        cursorColor: Colors.white60,
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        keyboardType: TextInputType.number,
+                        keyboardAppearance: Brightness.dark ,
+                        onEditingComplete: (){
+                          if(_textEditingController.text.isNotEmpty){
+                            calculaOrcamento(double.parse(_textEditingController.text));                          
+                            _textEditingController.clear();
+                          }
+                        },
                       ),
                     )
                   ),
